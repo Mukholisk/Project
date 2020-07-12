@@ -20,14 +20,14 @@ class Application:
               
     def getCommend(self):
         print("---------------------------")
-        print("--- 크롤링 프로그램입니다 ---")
-        print("-- 1.   추가             --")
-        print("-- 2.   삭제             --")
-        print("-- 3. 정보갱신           --")
-        print("-- 4.   출력             --")
-        print("-- 5.   저장             --")
-        print("-- 6. 불러오기           --")
-        print("-- 0.   종료             --")
+        print("---  크롤링 프로그램입니다  ---")
+        print("-- 1.   추가               --")
+        print("-- 2.   삭제               --")
+        print("-- 3. 정보갱신             --")
+        print("-- 4.   출력               --")
+        print("-- 5.   저장               --")
+        print("-- 6. 불러오기             --")
+        print("-- 0.   종료               --")
         print("---------------------------")
         cmd = int(input("-- 기능을 선택하세요 : "))
 
@@ -54,20 +54,32 @@ class Application:
             else:
                 print("★ 잘못된 선택입니다.")
 
+    # 중복된 값을 거름, 정렬..?
     def add(self):
         os.system("cls")
-        print("---        추가        ---")
+        print("---         추가         ---")
         name = input("이름을 입력하세요 : ")
         id = input("ID를 입력하세요 : ")
-        temp = [name, id, '', '', '', '', '', ''] # 사용자로부터 이름과 id만 입력받고, 나머지 값은 ''로 초기화
-        self.data.append(temp)
+        isSame = False
 
-        print("추가되었습니다.")
+        for i in range(len(self.data)):
+            if str(self.data[i][1]).replace(' ', '') != id.replace(' ', ''):
+                continue
+            else: # 중복인 데이터를 입력받았을 경우
+                isSame = True
+                break
+
+        if not isSame:
+            temp = [name, id, '', '', '', '', '', ''] # 사용자로부터 이름과 id만 입력받고, 나머지 값은 ''로 초기화
+            self.data.append(temp)
+            print("추가되었습니다.")
+        else:
+            print("입력한 id 값과 중복된 값이 존재합니다.")
 
     def remove(self):
         os.system("cls")
         isRemove = False
-        print("---        삭제        ---")
+        print("---         삭제         ---")
         id = input("제거할 ID를 입력하세요 : ")
         for i in range(0, len(self.data)):
             if id == self.data[i][1]:
@@ -121,7 +133,7 @@ class Application:
 
     def show(self):
         os.system("cls")
-        print("---        출력        ---")
+        print("---         출력         ---")
         for i in range(0, len(self.data)):
             print(str(i+1) + ". 이름 : " + self.data[i][0])
             print("    ID : " + self.data[i][1])
