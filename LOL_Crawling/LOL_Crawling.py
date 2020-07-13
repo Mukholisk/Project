@@ -98,13 +98,8 @@ class Application:
         while i < len(self.data):           
             # url로 크롤링
             url = "https://www.op.gg/summoner/userName=" + parse.quote(self.data[i][1])
-<<<<<<< HEAD
             req = request.urlopen(url)
             soup = bs4.BeautifulSoup(req, 'html.parser')
-=======
-            req = request.get(url)
-            soup = bs4.BeautifulSoup(req.text, 'html.parser')
->>>>>>> 9f73f048ad9481a6e17f5192a91fdd846ffc0d09
             isError = False # 잘못된 아이디인가
 
             # op.gg에 등록되지 않은 아이디인가?
