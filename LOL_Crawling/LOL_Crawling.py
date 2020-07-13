@@ -9,8 +9,8 @@
 
 #-*-coding: utf-8 -*-
 import bs4
-from urllib import parse
-import requests
+import urllib.parse as parse
+import urllib.request as request
 import os
 
 class Application:
@@ -97,7 +97,7 @@ class Application:
         while i < len(self.data):           
             # url로 크롤링
             url = "https://www.op.gg/summoner/userName=" + parse.quote(self.data[i][1])
-            req = requests.get(url)
+            req = request.get(url)
             soup = bs4.BeautifulSoup(req.text, 'html.parser')
             isError = False # 잘못된 아이디인가
 
