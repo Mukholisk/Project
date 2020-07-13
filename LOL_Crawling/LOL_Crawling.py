@@ -1,6 +1,7 @@
 # ... iss Crew
 # ... Made By Mukho
 # ... 2020-07-11 SAT
+# ... Last Update : 2020-07-13 MON
 # ... Recovering LOL_Crawing(2018)_CUI version.
 
 # 2018년 5월에 만들었던 ESPers_LOL.exe의 소스 코드가 사라져 다시 만듬.
@@ -9,8 +10,8 @@
 
 #-*-coding: utf-8 -*-
 import bs4
-from urllib import parse
-import requests
+import urllib.parse as parse
+import urllib.request as request
 import os
 
 class Application:
@@ -19,16 +20,16 @@ class Application:
         self.data = []
               
     def getCommend(self):
-        print("---------------------------")
+        print("-------------------------------")
         print("---  크롤링 프로그램입니다  ---")
-        print("-- 1.   추가               --")
-        print("-- 2.   삭제               --")
-        print("-- 3. 정보갱신             --")
-        print("-- 4.   출력               --")
-        print("-- 5.   저장               --")
-        print("-- 6. 불러오기             --")
-        print("-- 0.   종료               --")
-        print("---------------------------")
+        print("-- 1.   추가                 --")
+        print("-- 2.   삭제                 --")
+        print("-- 3. 정보갱신               --")
+        print("-- 4.   출력                 --")
+        print("-- 5.   저장                 --")
+        print("-- 6. 불러오기               --")
+        print("-- 0.   종료                 --")
+        print("-------------------------------")
         cmd = int(input("-- 기능을 선택하세요 : "))
 
         return cmd
@@ -57,7 +58,7 @@ class Application:
     # 중복된 값을 거름, 정렬..?
     def add(self):
         os.system("cls")
-        print("---         추가         ---")
+        print("---          추 가          ---")
         name = input("이름을 입력하세요 : ")
         id = input("ID를 입력하세요 : ")
         isSame = False
@@ -79,7 +80,7 @@ class Application:
     def remove(self):
         os.system("cls")
         isRemove = False
-        print("---         삭제         ---")
+        print("---          삭 제          ---")
         id = input("제거할 ID를 입력하세요 : ")
         for i in range(0, len(self.data)):
             if id == self.data[i][1]:
@@ -97,8 +98,13 @@ class Application:
         while i < len(self.data):           
             # url로 크롤링
             url = "https://www.op.gg/summoner/userName=" + parse.quote(self.data[i][1])
-            req = requests.get(url)
+<<<<<<< HEAD
+            req = request.urlopen(url)
+            soup = bs4.BeautifulSoup(req, 'html.parser')
+=======
+            req = request.get(url)
             soup = bs4.BeautifulSoup(req.text, 'html.parser')
+>>>>>>> 9f73f048ad9481a6e17f5192a91fdd846ffc0d09
             isError = False # 잘못된 아이디인가
 
             # op.gg에 등록되지 않은 아이디인가?
@@ -133,16 +139,16 @@ class Application:
 
     def show(self):
         os.system("cls")
-        print("---         출력         ---")
+        print("---          출 력          ---")
         for i in range(0, len(self.data)):
             print(str(i+1) + ". 이름 : " + self.data[i][0])
-            print("    ID : " + self.data[i][1])
-            print("    Tier : " + self.data[i][2])
-            print("    Most 1 : " + self.data[i][3])
-            print("    Most 2 : " + self.data[i][4])
-            print("    Most 3 : " + self.data[i][5])
-            print("    Most 4 : " + self.data[i][6])
-            print("    Most 5 : " + self.data[i][7])
+            print("     ID     : " + self.data[i][1])
+            print("     Tier   : " + self.data[i][2])
+            print("     Most 1 : " + self.data[i][3])
+            print("     Most 2 : " + self.data[i][4])
+            print("     Most 3 : " + self.data[i][5])
+            print("     Most 4 : " + self.data[i][6])
+            print("     Most 5 : " + self.data[i][7])
 
     def save(self):
         try:
