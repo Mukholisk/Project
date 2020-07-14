@@ -1,4 +1,4 @@
-3
+°í¾Æ¸®
 ¹¬ È£
 Diamond 4
 Thresh
@@ -6,7 +6,7 @@ Graves
 LeeSin
 Janna
 Nidalee
-¤·
+°í¹¬È£
 ITX Ã»Ãá
 Platinum 4
 LeeSin
@@ -14,11 +14,11 @@ Ezreal
 Thresh
 Lulu
 JarvanIV
-¤»¤»
+¹«¿ä
 Made By Google
 Iron 1
+Jax
 Caitlyn
 LeeSin
-MissFortune
 Ezreal
-Jax
+MissFortune
