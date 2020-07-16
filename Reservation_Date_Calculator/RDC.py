@@ -27,6 +27,7 @@ class MyApp(QWidget):
         # 메인 달력
         cal = QCalendarWidget(self)
         cal.setGridVisible(True)
+        cal.setVerticalHeaderFormat(0) # 주차 없애기
         cal.clicked[QDate].connect(self.showDate)
 
         # 글자 크기 변경
