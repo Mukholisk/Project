@@ -2,7 +2,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB)
 {    
     if(msg == "!명령어")
     {
-        var help = "!주사위\n!날짜\n!전역일";
+        var help = "!주사위\n!날짜\n!전역일\n실검";
         replier.reply(help);
     }
 
