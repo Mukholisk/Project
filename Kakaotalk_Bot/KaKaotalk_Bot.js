@@ -59,7 +59,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB)
 {    
     if(msg == "!명령어")
     {
-        var help = "!주사위\n!날짜\n!전역일\n디데이\n실검\n날씨\n'지역' 날씨";
+        var help = "!주사위\n!날짜\n!전역일\n디데이\n실검\n전국날씨\n'지역' 날씨";
         replier.reply(help);
     }
 
@@ -128,7 +128,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB)
         replier.reply("[네이버 실시간 검색어 순위]\n\n" + result.trim());
     }
 
-    if (msg == "!날씨")
+    if (msg == "!전국날씨")
     {
         var data1 = Utils.getWebText("https://m.search.naver.com/search.naver?query=날씨");
         var data2 = data1.split("전국날씨</strong>");
@@ -144,7 +144,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB)
     }
 
     // ex) 묵호 날씨 / 동해시 날씨 / 서울특별시 동대문구 회기동 / 회기동 날씨 / 경기도 영통구 날씨
-    if (msg.split(" ")[0][0] == "!" && msg.indexOf('날씨') != -1)
+    if (msg.split(" ")[0][0] == "!" && msg.indexOf('날씨') != -1 && msg != "!전국날씨")
     {
         var idx = msg.indexOf('날씨');
         var data = msg.slice(1, idx-1);
