@@ -59,7 +59,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB)
 {    
     if(msg == "!명령어")
     {
-        var help = "!주사위\n!날짜\n!전역일\n디데이\n실검\n전국날씨\n'지역' 날씨";
+        var help = "!주사위\n!날짜\n!전역일\n!디데이\n!실검\n!전국날씨\n!'지역' 날씨";
         replier.reply(help);
     }
 
