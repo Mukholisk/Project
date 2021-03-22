@@ -3,6 +3,9 @@
 # ... 2021-03-22 MON
 # ... Last Update : 2021-03-22 MON
 # op.gg 서버 등록 id 기준으로 검색하기 때문에 null값이 입력될 가능성이 존재한다.
+# ID 누락의 경우 직접 csv file에서 수정해줘야한다.
+# csv 파일에 이름과 아이디만 붙여넣고 잘 가공하면 된다.
+# 좀 오래걸린다.(2분) 느리면 직접 해라.
 
 #-*-coding: utf-8 -*-
 import bs4
@@ -122,26 +125,32 @@ class Application:
                 try: # 전 시즌 티어 가져오기
                     pre_tier_s = soup.find("div", "PastRank").find_all("li")
                     pre_tier_str = str(pre_tier_s[-1])
-                    s = pre_tier_str.find("title=")+7
-                    if pre_tier_str[s:].find("Iron") != -1:
-                        e = pre_tier_str[s:].find("Iron")+6
-                    elif pre_tier_str[s:].find("Bronze") != -1:
-                        e = pre_tier_str[s:].find("Bronze")+8
-                    elif pre_tier_str[s:].find("Silver") != -1:
-                        e = pre_tier_str[s:].find("Silver")+8
-                    elif pre_tier_str[s:].find("Gold") != -1:
-                        e = pre_tier_str[s:].find("Gold")+6
-                    elif pre_tier_str[s:].find("Platinum") != -1:
-                        e = pre_tier_str[s:].find("Platinum")+10
-                    elif pre_tier_str[s:].find("Diamond") != -1:
-                        e = pre_tier_str[s:].find("Diamond")+9
-                    elif pre_tier[s:].find("Master") != -1:
-                        e = pre_tier_str[s:].find("Master")+7
-                    elif pre_tier_str[s:].find("Grandmaster") != -1:
-                        e = pre_tier_str[s:].find("Grandmaster")+12
-                    elif pre_tier_str[s:].find("Challenger") != -1:
-                        e = pre_tier_str[s:].find("Challenger")+11
-                    pre_tier = pre_tier_str[s:s+e]
+
+                    if("S2020" in pre_tier_str):
+                        s = pre_tier_str.find("title=")+7
+                        if pre_tier_str[s:].find("Iron") != -1:
+                            e = pre_tier_str[s:].find("Iron")+6
+                        elif pre_tier_str[s:].find("Bronze") != -1:
+                            e = pre_tier_str[s:].find("Bronze")+8
+                        elif pre_tier_str[s:].find("Silver") != -1:
+                            e = pre_tier_str[s:].find("Silver")+8
+                        elif pre_tier_str[s:].find("Gold") != -1:
+                            e = pre_tier_str[s:].find("Gold")+6
+                        elif pre_tier_str[s:].find("Platinum") != -1:
+                            e = pre_tier_str[s:].find("Platinum")+10
+                        elif pre_tier_str[s:].find("Diamond") != -1:
+                            e = pre_tier_str[s:].find("Diamond")+9
+                        elif pre_tier_str[s:].find("Master") != -1:
+                            e = pre_tier_str[s:].find("Master")+7
+                        elif pre_tier_str[s:].find("Grandmaster") != -1:
+                            e = pre_tier_str[s:].find("Grandmaster")+12
+                        elif pre_tier_str[s:].find("Challenger") != -1:
+                            e = pre_tier_str[s:].find("Challenger")+11
+                        else:
+                            pre_tier = "Unranked"
+                        pre_tier = pre_tier_str[s:s+e]
+                    else:
+                        pre_tier = "Unranked"     
                 except:
                     pre_tier = "Unranked" # 예외처리
                 self.data[i][3] = pre_tier
@@ -155,7 +164,6 @@ class Application:
             print("     ID       : " + self.data[i][1])
             print("     Tier     : " + self.data[i][2])
             print("     Pre_Tier : " + self.data[i][3])
-            print(self.data[i])
 
     def save(self):
         os.system("cls")
@@ -174,6 +182,9 @@ class Application:
             with open("dataFile.csv", "r",encoding='utf-8-sig') as f:
                 rd = csv.reader(f)
                 for item in rd:
+                    if(len(item) == 2):
+                        item.append('')
+                        item.append('')
                     self.data.append(item)
                 print("불러오기에 성공했습니다.")
         except:
