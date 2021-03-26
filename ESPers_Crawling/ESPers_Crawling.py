@@ -1,7 +1,7 @@
-# ... iss Crew
+6# ... iss Crew
 # ... Made By Mukho
 # ... 2021-03-22 MON
-# ... Last Update : 2021-03-22 MON
+# ... Last Update : 2021-03-27 SAT
 # op.gg 서버 등록 id 기준으로 검색하기 때문에 null값이 입력될 가능성이 존재한다.
 # ID 누락의 경우 직접 csv file에서 수정해줘야한다.
 # csv 파일에 이름과 아이디만 붙여넣고 잘 가공하면 된다.
@@ -95,12 +95,19 @@ class Application:
         
     def crawling(self):
         i = 0
-        while i < len(self.data):           
+        while i < len(self.data):     
+            # 파일(dataFile.csv)에서 불러온 목록 중 아이디가 공백('')이 아닌가? - 210326에 버그 찾음
+            if(self.data[i][1] == ''):
+                print(self.data[i][0]+"의 id 값이 없어 제거합니다.")
+                del self.data[i]
+                continue
             # url로 크롤링
             url = "https://www.op.gg/summoner/userName=" + parse.quote(self.data[i][1])
             req = request.urlopen(url)
             soup = bs4.BeautifulSoup(req, 'html.parser')
             isError = False # 잘못된 아이디인가
+
+            
             # op.gg에 등록되지 않은 아이디인가?
             if str(type(soup.find('h2'))) == "<class 'NoneType'>":
                 if str(type(soup.find('div', 'ChampionImage'))) == "<class 'NoneType'>": # 등록은 되어있지만 전적이 없는 아이디인가?

@@ -76,7 +76,7 @@
  [],
  False,
  False,
- 1616426315,
+ 1616771851,
  [('run.exe',
    'c:\\users\\komogoon\\appdata\\local\\programs\\python\\python37-32\\lib\\site-packages\\PyInstaller\\bootloader\\Windows-32bit\\run.exe',
    'EXECUTABLE')])
