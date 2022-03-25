@@ -1,7 +1,7 @@
-6# ... iss Crew
+# ... iss Crew
 # ... Made By Mukho
-# ... 2021-03-22 MON
-# ... Last Update : 2021-03-27 SAT
+# ... 2022-03-22 MON
+# ... Last Update : 2022-03-23 WEN
 # op.gg 서버 등록 id 기준으로 검색하기 때문에 null값이 입력될 가능성이 존재한다.
 # ID 누락의 경우 직접 csv file에서 수정해줘야한다.
 # csv 파일에 이름과 아이디만 붙여넣고 잘 가공하면 된다.
@@ -95,73 +95,104 @@ class Application:
         
     def crawling(self):
         i = 0
-        while i < len(self.data):     
-            # 파일(dataFile.csv)에서 불러온 목록 중 아이디가 공백('')이 아닌가? - 210326에 버그 찾음
-            if(self.data[i][1] == ''):
-                print(self.data[i][0]+"의 id 값이 없어 제거합니다.")
-                del self.data[i]
-                continue
-            # url로 크롤링
-            url = "https://www.op.gg/summoner/userName=" + parse.quote(self.data[i][1])
-            req = request.urlopen(url)
-            soup = bs4.BeautifulSoup(req, 'html.parser')
-            isError = False # 잘못된 아이디인가
+        if len(self.data) == 0:
+            print("data가 없습니다.")
+        else:
+            while i < len(self.data):     
+                # 파일(dataFile.csv)에서 불러온 목록 중 아이디가 공백('')이 아닌가? - 210326에 버그 찾음
+                if(self.data[i][1] == ''):
+                    print(self.data[i][0]+"의 id 값이 없어 제거합니다.")
+                    del self.data[i]
+                    continue
+                # url로 크롤링
+                url = "https://www.op.gg/summoner/userName=" + parse.quote(self.data[i][1])
+                req = request.urlopen(url)
+                soup = bs4.BeautifulSoup(req, 'html.parser')
+                isError = False # 잘못된 아이디인가
 
-            
-            # op.gg에 등록되지 않은 아이디인가?
-            if str(type(soup.find('h2'))) == "<class 'NoneType'>":
-                if str(type(soup.find('div', 'ChampionImage'))) == "<class 'NoneType'>": # 등록은 되어있지만 전적이 없는 아이디인가?
+                # op.gg에 등록되지 않은 아이디인가?
+                if str(type(soup.find('h2'))) == "<class 'NoneType'>":
+                    #if str(type(soup.find('div', 'ChampionImage'))) == "<class 'NoneType'>": # 등록은 되어있지만 전적이 없는 아이디인가?
+                        #isError = True
+                    #else:
+                        #isError = False
+                    print('',end='')
+                elif soup.find('h2').text == "This summoner is not registered at OP.GG. Please check spelling.": # 등록이 안되어 있는가?
                     isError = True
+                
+                # 잘못된 아이디
+                if isError:
+                    print("op.gg에 등록되지 않은 소환사입니다. '" + self.data[i][1] + "' id의 데이터를 삭제합니다.")
+                    del self.data[i]
+                    if i != 0:
+                        i -= 1
                 else:
-                    isError = False
-            elif soup.find('h2').text == "This summoner is not registered at OP.GG. Please check spelling.": # 등록이 안되어 있는가?
-                isError = True
-            
-            # 잘못된 아이디
-            if isError:
-                print("op.gg에 등록되지 않은 소환사입니다. '" + self.data[i][1] + "' id의 데이터를 삭제합니다.")
-                del self.data[i]
-                if i != 0:
-                    i -= 1
-            else:
-                self.data[i][1] = soup.find('div', 'Information').find('span', 'Name').text # id
-                self.data[i][2] = soup.find("div", {"class":"TierRank"}).text.strip() # tier
-                s = 0
-                e = -1
-                pre_tier = "" # pre tier
-                try: # 전 시즌 티어 가져오기
-                    pre_tier_s = soup.find("div", "PastRank").find_all("li")
-                    pre_tier_str = str(pre_tier_s[-1])
+                    user_info = list(str(soup.find_all('meta')[-2])[15:-29].split(' / '))
+                    if len(user_info) > 3:
+                        temp_most = list(user_info[3].split(', '))
+                        temp_most_list = []
+                        for m in temp_most:
+                            temp = list(m.split())
+                            temp_most_list.append(temp[0])
+                        user_info[3] = temp_most_list
 
-                    if("S2020" in pre_tier_str):
-                        s = pre_tier_str.find("title=")+7
-                        if pre_tier_str[s:].find("Iron") != -1:
-                            e = pre_tier_str[s:].find("Iron")+6
-                        elif pre_tier_str[s:].find("Bronze") != -1:
-                            e = pre_tier_str[s:].find("Bronze")+8
-                        elif pre_tier_str[s:].find("Silver") != -1:
-                            e = pre_tier_str[s:].find("Silver")+8
-                        elif pre_tier_str[s:].find("Gold") != -1:
-                            e = pre_tier_str[s:].find("Gold")+6
-                        elif pre_tier_str[s:].find("Platinum") != -1:
-                            e = pre_tier_str[s:].find("Platinum")+10
-                        elif pre_tier_str[s:].find("Diamond") != -1:
-                            e = pre_tier_str[s:].find("Diamond")+9
-                        elif pre_tier_str[s:].find("Master") != -1:
-                            e = pre_tier_str[s:].find("Master")+7
-                        elif pre_tier_str[s:].find("Grandmaster") != -1:
-                            e = pre_tier_str[s:].find("Grandmaster")+12
-                        elif pre_tier_str[s:].find("Challenger") != -1:
-                            e = pre_tier_str[s:].find("Challenger")+11
+                    tier_lp = soup.find("div", "css-kff9ir e1y28yym2")
+
+                    print(tier_lp)
+                    # 아이디, 현재 시즌 티어
+                    self.data[i][1] = user_info[0]
+                    self.data[i][2] = "Unranked" if user_info[1].find('Lv') == 0 else " ".join(list(user_info[1].split())[:2])
+                    
+                    # 직접 정규화
+                    pre_season_html = str(soup.find("div", "css-nvyacf e1y28yym3").find_all("li"))[1:-1]
+                    while(True):
+                        if '<div class="" style="position:relative">' in pre_season_html:
+                            s = pre_season_html.find('<div class="" style="position:relative">')
+                            pre_season_html = pre_season_html[:s] + pre_season_html[s+40:]
                         else:
-                            pre_tier = "Unranked"
-                        pre_tier = pre_tier_str[s:s+e]
-                    else:
-                        pre_tier = "Unranked"     
-                except:
-                    pre_tier = "Unranked" # 예외처리
-                self.data[i][3] = pre_tier
-                i += 1
+                            break
+                    while(True):
+                        if '<!-- -->' in pre_season_html:
+                            s = pre_season_html.find('<!-- -->')
+                            pre_season_html = pre_season_html[:s] + pre_season_html[s+8:]
+                        else:
+                            break
+                    while(True):
+                        if '<b>' in pre_season_html:
+                            s = pre_season_html.find('<b>')
+                            pre_season_html = pre_season_html[:s] + pre_season_html[s+3:]
+                        else:
+                            break
+                    while(True):
+                        if '</b>' in pre_season_html:
+                            s = pre_season_html.find('</b>')
+                            pre_season_html = pre_season_html[:s] + pre_season_html[s+4:]
+                        else:
+                            break
+                    while(True):
+                        if '<li>' in pre_season_html:
+                            s = pre_season_html.find('<li>')
+                            pre_season_html = pre_season_html[:s] + pre_season_html[s+4:]
+                        else:
+                            break
+                    while(True):
+                        if '</li>' in pre_season_html:
+                            s = pre_season_html.find('</li>')
+                            pre_season_html = pre_season_html[:s] + pre_season_html[s+5:]
+                        else:
+                            break
+                    while(True):
+                        if '</div>' in pre_season_html:
+                            s = pre_season_html.find('</div>')
+                            pre_season_html = pre_season_html[:s] + pre_season_html[s+6:]
+                        else:
+                            break
+
+                    pre_tier = list(pre_season_html.split(', ')) # 모든 시즌의 랭크 기록 저장
+                    
+                    # 직전 시즌 랭크 기록
+                    self.data[i][3] = list(pre_tier[-1].split())[1].capitalize() if 'S2021' in pre_tier[-1] else "Unranked"
+                    i += 1
 
     def show(self):
         os.system("cls")
