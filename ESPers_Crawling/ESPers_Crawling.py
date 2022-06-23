@@ -220,9 +220,10 @@ class Application:
             with open("dataFile.csv", "r",encoding='utf-8-sig') as f:
                 rd = csv.reader(f)
                 for item in rd:
-                    if(len(item) == 2):
-                        item.append('')
-                        item.append('')
+                    # if(len(item) == 2):
+                    #     item.append('')
+                    #     item.append('')
+                    u = user(item[:1], item[2:4], item[4:])
                     self.data.append(item)
                 print("불러오기에 성공했습니다.")
         except:
