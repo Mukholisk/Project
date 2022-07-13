@@ -3,6 +3,7 @@
 # ... 2020-07-16 THU
 # ... 2022-06-23 THU: Update(23div->23bde)
 # ... VSCode 가상환경 참조: https://redfox.tistory.com/21#32%EB%B9%84%ED%8A%B8%EC%9A%A9_%ED%8C%8C%EC%9D%B4%EC%8D%AC_%EC%84%A4%EC%B9%98
+# ... Window XP 환경에서 돌아가야 하는 프로그램 -> 가상머신에 Window 7 32bit을 설치 후, 그 환경에서 제작하여 해결
 # ... 폴더 다운로드 후, 바로가기 파일을 이용해 프로그램 실행
 # ... 23Bde Reservation Date Calculator
 
